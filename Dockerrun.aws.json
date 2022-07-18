@@ -1,0 +1,70 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+      {
+        "essential": true,
+        "image": "adminer",
+        "memory":100,
+        "name": "adminer",
+        "portMappings": [
+          {
+            "containerPort": 9191,
+            "hostPort": 8080
+          }
+        ]
+      },
+      {
+        "command": [
+          "--default-authentication-plugin=mysql_native_password"
+        ],
+        "environment": [
+          {
+            "name": "MYSQL_ROOT_PASSWORD",
+            "value": "example"
+          }
+        ],
+        "essential": true,
+        "image": "mysql",
+        "memory":100,
+        "name": "db"
+      },
+      {
+        "essential": true,
+        "image": "gerges1899/cloud_project",
+        "memory":100,
+        "mountPoints": [
+          {
+            "containerPath": "/var/www/html/",
+            "sourceVolume": "php"
+          }
+        ],
+        "name": "php",
+        "portMappings": [
+          {
+            "containerPort": 80,
+            "hostPort": 80
+          }
+        ],
+        "environment": [
+          {
+            "name": "Container",
+            "value": "PHP"
+          }
+        ]
+      }
+    ],
+    "volumes": [
+      {
+        "name": "php",
+        "host": {
+          "sourcePath": "./src:/var/www/html/"
+        }
+      },
+      {
+        "name": "db",
+        "host": {
+          "sourcePath": "mysql-data:/var/lib/mysql"
+        }
+      }
+    ]
+  }
